@@ -1,0 +1,20 @@
+.ReactTable {
+  z-index: 10;
+}
+
+.table-header-row {
+  display: flex;
+  align-items: center;
+
+  > div.float-left:not(:last-child) {
+    margin-right: 5px;
+  }
+
+  > div.float-right:not(:first-child) {
+    margin-left: 5px;
+  }
+
+  .fill {
+    flex: 1;
+  }
+}
