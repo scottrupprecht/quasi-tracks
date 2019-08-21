@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox-sw.js");
 
 importScripts(
-  "/quasi-tracks/precache-manifest.3ec96f88d5a5f0802ccad02816035adb.js"
+  "/quasi-tracks/index.html/precache-manifest.9a49645ebfdca5eab85d5b2e5cd22230.js"
 );
 
 workbox.clientsClaim();
@@ -28,7 +28,7 @@ self.__precacheManifest = [].concat(self.__precacheManifest || []);
 workbox.precaching.suppressWarnings();
 workbox.precaching.precacheAndRoute(self.__precacheManifest, {});
 
-workbox.routing.registerNavigationRoute("/quasi-tracks/index.html", {
+workbox.routing.registerNavigationRoute("/quasi-tracks/index.html/index.html", {
   
   blacklist: [/^\/_/,/\/[^\/]+\.[^\/]+$/],
 });
