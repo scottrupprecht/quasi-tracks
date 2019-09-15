@@ -29,7 +29,7 @@ const PublicPlaylistSearchResultsTable = ({ playlists, isLoading, onSelect }) =>
     ],
   };
   return (
-    <div style={{ padding: 10 }}>
+    <div className='search-results-table'>
       <div className='clearfix'>
         <div className='float-left'>
           <label>Loaded {_.size(playlists)} Playlist{sOrNoS(playlists)}</label>

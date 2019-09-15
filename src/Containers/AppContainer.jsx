@@ -18,6 +18,7 @@ import QueryType from '../Enums/QueryType';
 import SelectAlbumModal from '../Components/Modals/SelectAlbumModal';
 import SelectPublicPlaylistModal from '../Components/Modals/SelectPublicPlaylistModal';
 import FeatureModal from '../Components/Modals/FeatureModal';
+import PrivacyPolicyModal from '../Components/Modals/PrivacyPolicyModal';
 
 class AppContainer extends React.PureComponent {
   constructor (props) {
@@ -27,54 +28,61 @@ class AppContainer extends React.PureComponent {
       selectSongModalShowing: false,
       selectArtistModalShowing: false,
       isShowingFeatureModal: false,
+      isShowingPrivacyPolicyModal: false,
       query: '',
       queryType: null,
     };
   }
 
   render () {
-    const { query, queryType, isShowingFeatureModal } = this.state;
+    const { query, queryType, isShowingFeatureModal, isShowingPrivacyPolicyModal } = this.state;
     const { tracks, currentUserPlaylists, selectedTracks, selectedPlaylist, allTracksAreSelected, isProcessing } = this.props;
 
     const noResults = _.size(tracks) === 0;
 
     return (
       <>
-        <div style={{ width: '100vw', height: '100vh', display: 'flex', flexDirection: 'row-reverse' }}>
-          <div className='features-sidebar features-sidebar-step bg-white' style={{ flex: 3, overflowY: 'auto', paddingTop: 10, paddingBottom: 10 }}>
+        <div className='app-container'>
+          <div className='features-sidebar features-sidebar-step bg-white'>
             <FeatureSidebar />
           </div>
-          <div style={{ flex: 10, display: 'flex', flexDirection: 'column', maxWidth: '100%' }}>
+          <main>
             <div className='header bg-gradient-primary'>
-              <SearchForm submitArtistSearch={this.submitSearch} />
+              <div>
+                <SearchForm submitArtistSearch={this.submitSearch} />
+              </div>
+              {_.size(tracks) > 0 &&
+                <div className='mobile-parameters-container'>
+                  <Button color='default' size='sm' onClick={this.showFeatureModal}><i className='fa fa-headphones' /> Set Parameters</Button>
+                </div>}
             </div>
-            <div className='results-step' style={{ display: 'flex', flex: 1, overflowY: 'auto', flexDirection: 'column', justifyContent: noResults ? 'center' : undefined }}>
+            <div className='results-step' style={{ justifyContent: noResults ? 'center' : undefined }}>
               <If condition={noResults}>
-                <h2 className='text-center' style={{ padding: 10 }}>Search for songs using the form above...</h2>
+                <h2 className='text-center'>Search for songs using the form above...</h2>
               </If>
               <If condition={!noResults}>
-                <div style={{ padding: 10 }}>
-                  <div className='table-header-row' style={{ marginBottom: 10 }}>
-                    <div className='float-left'>
-                      <Creatable
-                        className='playlist-select'
-                        placeholder='Select a Playlist...'
-                        onChange={this.props.selectCurrentUserPlaylist}
-                        onCreateOption={this.props.createNewPlaylist}
-                        value={selectedPlaylist}
-                        options={currentUserPlaylists}
-                        styles={{ menu: base => ({ ...base, zIndex: 11 }) }}
-                        formatCreateLabel={(value) => `Create Playlist: '${value}'`}
-                        classNamePrefix='react-select'
-                      />
-                    </div>
-                    <div className='float-left'>
-                      <Button color='secondary' disabled={_.isEmpty(selectedTracks) || !selectedPlaylist} size='sm' onClick={this.addTracksToPlaylist}>Add to Playlist ({_.size(selectedTracks)})</Button>
-                    </div>
-                    <div className='fill'>
-                      <div className='float-right'>
-                        <label>Loaded {_.size(tracks)} Track{sOrNoS(tracks)}</label>
+                <div>
+                  <div className='table-header-row'>
+                    <div className='playlist-container'>
+                      <div className='playlist-select'>
+                        <Creatable
+                          className='playlist-select'
+                          placeholder='Select a Playlist...'
+                          onChange={this.props.selectCurrentUserPlaylist}
+                          onCreateOption={this.props.createNewPlaylist}
+                          value={selectedPlaylist}
+                          options={currentUserPlaylists}
+                          styles={{ menu: base => ({ ...base, zIndex: 11 }) }}
+                          formatCreateLabel={(value) => `Create Playlist: '${value}'`}
+                          classNamePrefix='react-select'
+                        />
                       </div>
+                      <div className='add-to-playlist'>
+                        <Button color='secondary' disabled={_.isEmpty(selectedTracks) || !selectedPlaylist} size='sm' onClick={this.addTracksToPlaylist}>Add to Playlist ({_.size(selectedTracks)})</Button>
+                      </div>
+                    </div>
+                    <div className='track-count-container'>
+                      <label>Loaded {_.size(tracks)} Track{sOrNoS(tracks)}</label>
                     </div>
                   </div>
 
@@ -92,13 +100,9 @@ class AppContainer extends React.PureComponent {
               </If>
             </div>
             <div className='info-footer'>
-                Quasitracks uses the outstanding <a href='https://developer.spotify.com/documentation/web-api/' rel='noopener'>Spotify API</a>. We are in no way affiliated with Spotify.
+                Quasitracks uses the outstanding <a href='https://developer.spotify.com/documentation/web-api/' rel='noopener'>Spotify API</a>. We are in no way affiliated with Spotify. <a href='javascript:void(0);' onClick={this.showPrivacyPolicy}>Privacy Policy</a>
             </div>
-          </div>
-
-          {/* <div className="fab-container"> */}
-          {/*  <Button className="features-button-step" color="primary" onClick={this.showFeatureModal}><i className="fa fa-headphones"/> Set Parameters</Button> */}
-          {/* </div> */}
+          </main>
         </div>
         <SelectArtistModal
           show={!!query && queryType === QueryType.Artist}
@@ -125,6 +129,11 @@ class AppContainer extends React.PureComponent {
           show={isShowingFeatureModal}
           hide={this.hideFeatureModal}
         />
+
+        <PrivacyPolicyModal
+          show={isShowingPrivacyPolicyModal}
+          hide={this.hidePrivacyPolicy}
+        />
       </>
     );
   }
@@ -141,6 +150,14 @@ class AppContainer extends React.PureComponent {
 
   hideFeatureModal = () => {
     this.setState({ isShowingFeatureModal: false });
+  };
+
+  showPrivacyPolicy = () => {
+    this.setState({ isShowingPrivacyPolicyModal: true });
+  };
+
+  hidePrivacyPolicy = () => {
+    this.setState({ isShowingPrivacyPolicyModal: false });
   };
 
   showSearchModal = (query, queryType) => {

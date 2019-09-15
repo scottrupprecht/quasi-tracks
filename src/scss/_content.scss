@@ -1,0 +1,14 @@
+main {
+  display: flex;
+  flex-direction: column;
+  flex: 10;
+  max-width: 100%;
+
+  .results-step {
+    display: flex;
+    flex: 1;
+    overflow-y: auto;
+    flex-direction: column;
+    padding: 10px;
+  }
+}

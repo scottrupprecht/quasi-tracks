@@ -22,20 +22,19 @@ const SearchForm = ({ searchedText, submitArtistSearch }) => {
 
       <div style={{ display: 'flex', alignItems: 'center', marginTop: 7 }}>
         <div className='float-left' style={{ flex: 1 }}>
-          {searchedText && <span style={{ margin: 0 }}>{searchedText}</span>}
+          {searchedText && <span className='text-default' style={{ margin: 0 }}>{searchedText}</span>}
         </div>
 
         <div className='float-right'>
           <Button color='secondary' type='submit'>Search for {label}...</Button>
         </div>
-
       </div>
     </Form>
   );
 };
 
 SearchForm.propTypes = {
-  searchedText: PropTypes.string,
+  searchedText: PropTypes.node,
   submitArtistSearch: PropTypes.func.isRequired,
 };
 

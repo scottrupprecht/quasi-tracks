@@ -12,11 +12,7 @@ const SelectPublicPlaylistModal = props => {
     <Modal isOpen={show} toggle={props.hide} className={props.className} size='lg'>
       <ModalHeader toggle={props.hide}>Search for a Public Playlist</ModalHeader>
       <ModalBody>
-        <Row style={{
-          marginTop: 7,
-          overflowX: 'auto',
-        }}
-        >
+        <Row className='search-modal'>
           <Col md='12'>
             <PublicPlaylistSearchResultsTable
               playlists={searchedPlaylists}

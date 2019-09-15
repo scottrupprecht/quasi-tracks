@@ -5,6 +5,8 @@
 .table-header-row {
   display: flex;
   align-items: center;
+  justify-content: center;
+  margin-bottom: 10px;
 
   > div.float-left:not(:last-child) {
     margin-right: 5px;
@@ -17,4 +19,8 @@
   .fill {
     flex: 1;
   }
+}
+
+.search-results-table {
+  padding: 10px;
 }

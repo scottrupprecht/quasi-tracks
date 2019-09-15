@@ -7,8 +7,13 @@
   }
 }
 
-@media(max-width: 991px) {
-  .features-sidebar {
+.features-sidebar {
+  flex: 3;
+  overflow-y: auto;
+  padding-top: 10px;
+  padding-bottom: 10px;
+
+  @media(max-width: 991px) {
     display: none;
   }
 }

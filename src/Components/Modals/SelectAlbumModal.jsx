@@ -12,11 +12,7 @@ const SelectAlbumModal = props => {
     <Modal isOpen={show} toggle={props.hide} className={props.className} size='lg'>
       <ModalHeader toggle={props.hide}>Search for an Album</ModalHeader>
       <ModalBody>
-        <Row style={{
-          marginTop: 7,
-          overflowX: 'auto',
-        }}
-        >
+        <Row className='search-modal'>
           <Col md='12'>
             <AlbumSearchResultsTable albums={searchedAlbums} isLoading={isLoadingAlbums} onSelect={props.selectAlbum} />
           </Col>

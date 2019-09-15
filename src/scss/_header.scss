@@ -1,0 +1,15 @@
+.app-container {
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+  flex-direction: row-reverse;
+}
+.mobile-parameters-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 15px;
+
+  @media(min-width: 990px) {
+    display: none;
+  }
+}

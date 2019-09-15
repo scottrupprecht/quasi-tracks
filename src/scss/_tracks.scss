@@ -1,0 +1,27 @@
+.playlist-container {
+  display: flex;
+  flex: 1;
+  justify-content: space-between;
+  align-items: center;
+
+  @media(min-width: 990px) {
+    justify-content: start;
+  }
+}
+
+.track-count-container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex: 1;
+
+  label {
+    margin: 0;
+  }
+
+  @media(max-width: 991px) {
+    display: none;
+  }
+}
+
+//width: '100vw', height: '100vh', display: 'flex', flexDirection: 'row-reverse'

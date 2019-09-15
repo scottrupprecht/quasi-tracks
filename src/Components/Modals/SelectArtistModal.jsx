@@ -6,19 +6,15 @@ import { connect } from 'react-redux';
 import ArtistsResultsTable from '../Tables/ArtistsResultsTable';
 
 const SelectArtistModal = props => {
-  const { show, artists } = props;
+  const { show, artists, isLoadingArtists } = props;
 
   return (
     <Modal isOpen={show} toggle={props.hide} className={props.className} size='lg'>
       <ModalHeader toggle={props.hide}>Search for an Artist</ModalHeader>
       <ModalBody>
-        <Row style={{
-          marginTop: 7,
-          overflowX: 'auto',
-        }}
-        >
+        <Row className='search-modal'>
           <Col md='12'>
-            <ArtistsResultsTable artists={artists} onSelect={props.selectArtist} />
+            <ArtistsResultsTable artists={artists} onSelect={props.selectArtist} isLoading={isLoadingArtists} />
           </Col>
         </Row>
       </ModalBody>
@@ -28,15 +24,17 @@ const SelectArtistModal = props => {
 
 SelectArtistModal.propTypes = {
   show: PropTypes.bool.isRequired,
+  isLoadingArtists: PropTypes.bool.isRequired,
   artists: PropTypes.array.isRequired,
   className: PropTypes.string,
   selectArtist: PropTypes.func.isRequired,
   hide: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = ({ spotify }) => {
+const mapStateToProps = ({ spotify, loading }) => {
   return {
     artists: spotify.searchedArtists,
+    isLoadingArtists: loading.isLoadingArtists,
   };
 };
 
