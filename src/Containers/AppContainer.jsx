@@ -1,4 +1,6 @@
 import React from 'react';
+import store from 'store';
+import tour from 'tour';
 import PropTypes from 'prop-types';
 import FeatureSidebar from '../QuasiTracks/FeatureSidebar';
 import SearchForm from '../Components/Search/SearchForm';
@@ -32,6 +34,48 @@ class AppContainer extends React.PureComponent {
       query: '',
       queryType: null,
     };
+
+    this.preSearchTour = {
+      id: 'presearch',
+      steps: [
+        {
+          target: '#txt-artist-search',
+          content: 'First start by search for an Artist, Album, or Playlist.',
+          disableBeacon: true,
+        }
+      ],
+    };
+
+    this.tracksLoadedTour = {
+      id: 'post-processing',
+      steps: [
+        {
+          target: props.isMobile ? '.mobile-parameters-modal-trigger' : '.features',
+          content: 'Now that tracks are loaded, you can set parameters using the sliders and switches over here.',
+        },
+        {
+          target: '.score-column',
+          content: 'The score indicates how similar the song is to the parameters you\'ve set. The closer to zero, the better.',
+        },
+        {
+          target: '.play-column',
+          content: 'If you have Spotify open you can press the play button on any track to hear the track.',
+        },
+        {
+          target: '.playlist-container',
+          content: 'If you fine a track or two that you like, you can select (or create) a playlist and add the selected tracks to the playlist.',
+        }
+      ],
+    };
+
+    this.showPreSearchTour = this.showTour.bind(this, 'pre-search', this.preSearchTour);
+    this.showTracksLoadedTour = this.showTour.bind(this, 'tracks-loaded', this.tracksLoadedTour);
+  }
+
+  componentDidUpdate (prevProps, prevState, snapshot) {
+    if (prevProps.isProcessing && !this.props.isProcessing) {
+      this.showTracksLoadedTour();
+    }
   }
 
   render () {
@@ -53,14 +97,14 @@ class AppContainer extends React.PureComponent {
               </div>
               {_.size(tracks) > 0 &&
                 <div className='mobile-parameters-container'>
-                  <Button color='default' size='sm' onClick={this.showFeatureModal}><i className='fa fa-headphones' /> Set Parameters</Button>
+                  <Button className='mobile-parameters-modal-trigger' color='default' size='sm' onClick={this.showFeatureModal}><i className='fa fa-headphones' /> Set Parameters</Button>
                 </div>}
             </div>
             <div className='results-step' style={{ justifyContent: noResults ? 'center' : undefined }}>
               <If condition={noResults}>
                 <h2 className='text-center'>Search for songs using the form above...</h2>
               </If>
-              <If condition={!noResults}>
+              {!noResults &&
                 <div>
                   <div className='table-header-row'>
                     <div className='playlist-container'>
@@ -95,12 +139,10 @@ class AppContainer extends React.PureComponent {
                     globalCheckboxSelected={this.props.globalCheckboxSelected}
                     startPlayingTrack={this.props.startPlayingTrack}
                   />
-                </div>
-
-              </If>
+                </div>}
             </div>
             <div className='info-footer'>
-                Quasitracks uses the outstanding <a href='https://developer.spotify.com/documentation/web-api/' rel='noopener'>Spotify API</a>. We are in no way affiliated with Spotify. <a href='javascript:void(0);' onClick={this.showPrivacyPolicy}>Privacy Policy</a>
+                Quasitracks uses the <a href='https://developer.spotify.com/documentation/web-api/' rel='noopener'>Spotify API</a>. We are in no way affiliated with Spotify. <a href='javascript:void(0);' onClick={this.showPrivacyPolicy}>Privacy Policy</a> | <a href='javascript:void(0);' onClick={this.showTourOnDemand}>Give me a Tour</a>
             </div>
           </main>
         </div>
@@ -138,6 +180,10 @@ class AppContainer extends React.PureComponent {
     );
   }
 
+  componentDidMount () {
+    this.showPreSearchTour();
+  }
+
   submitSearch = (e, query, queryType) => {
     e.preventDefault();
 
@@ -158,6 +204,29 @@ class AppContainer extends React.PureComponent {
 
   hidePrivacyPolicy = () => {
     this.setState({ isShowingPrivacyPolicyModal: false });
+  };
+
+  showTourOnDemand = () => {
+    const { tracks } = this.props;
+
+    const noResults = _.size(tracks) === 0;
+
+    if (noResults) {
+      this.showPreSearchTour(true);
+    } else {
+      this.showTracksLoadedTour(true);
+    }
+  };
+
+  showTour = async (key, config, force) => {
+    const storeKey = `qt_${key}_tour`;
+
+    if (!force && store.get(storeKey)) {
+      return;
+    }
+
+    await tour.start(config);
+    store.set(storeKey, true);
   };
 
   showSearchModal = (query, queryType) => {

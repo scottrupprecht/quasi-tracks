@@ -30,8 +30,8 @@ class TrackAnalysisResultsTable extends React.PureComponent {
           sortable: false,
           resizable: false,
         },
-        { Header: '', id: 'play', Cell: this.renderPlayButton, width: 35, className: 'text-center', filterable: false },
-        { Header: 'Score', accessor: 'score', width: 75 },
+        { Header: '', id: 'play', Cell: this.renderPlayButton, width: 35, className: 'play-column text-center', filterable: false },
+        { Header: 'Score', className: 'score-column text-center', accessor: 'score', width: 75 },
         { Header: 'Name', accessor: 'name', width: 200 },
         { Header: 'Album', accessor: 'album' },
         { Header: 'Track #', accessor: 'trackNumber', width: 75 }
